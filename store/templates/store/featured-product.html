@@ -1,0 +1,24 @@
+{% extends 'store/main.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2>Featured Product</h2>
+        {% if featured_product %}
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow-lg">
+                        <img src="{{ featured_product.imageURL }}" alt="{{ featured_product.name }}" class="card-img-top" style="height: 300px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ featured_product.name }}</h5>
+                            <p class="card-text">{{ featured_product.description }}</p>
+                            <p class="card-text"><strong>${{ featured_product.price }}</strong></p>
+                            <button class="btn btn-primary">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>No featured product available at the moment.</p>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'store/main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row g-4">
+        {% for product in products %}
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="card shadow-sm border-light rounded">
+                <img src="{{ product.imageURL }}" class="card-img-top" alt="{{ product.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-success"><strong>${{ product.price }}</strong></h6>
+                            {% if product.quantity > 0 %}
+                                <span class="text-muted">Available: {{ product.quantity }}</span>
+                            {% else %}
+                                <span class="text-danger">Out of Stock</span>
+                            {% endif %}
+                        </div>
+                        <div>
+                            {% if product.quantity > 0 %}
+                                <input type="number" id="quantity-{{ product.id }}" min="1" max="{{ product.quantity }}" value="1" class="form-control mb-3" style="width: 80px;">
+                                <button data-product="{{ product.id }}" data-action="add" class="btn btn-dark add-btn update-cart w-100">Add to Cart</button>
+                            {% else %}
+                                <button class="btn btn-outline-secondary w-100" disabled>Out of Stock</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.update-cart').forEach(button => {
+    button.addEventListener('click', function() {
+        const productId = this.dataset.product;
+        const action = this.dataset.action;
+
+        // Send data to the backend to update the cart
+        fetch('/update_item/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+            body: JSON.stringify({
+                'productId': productId,
+                'action': action,
+                'quantity': 1  // Default to 1 per add-to-cart action
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message); // Handle the response
+            // Optionally update the cart UI here
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+});
+
+
+</script>
+{% endblock content %}

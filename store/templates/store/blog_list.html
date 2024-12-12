@@ -1,0 +1,111 @@
+{% extends 'store/main.html' %}
+
+{% block content %}
+    <div class="container my-5">
+        <h2 class="text-center mb-4 text-dark">Our Latest Blog Posts</h2>
+
+        <!-- Blog Carousel -->
+        <div id="blog-carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-inner">
+                {% for blog in blogs %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="row d-flex justify-content-start align-items-center h-30">
+                        <!-- Title Section (left side) -->
+                        <div class="col d-flex h-100 align-items-start">
+                            <div class="blog-title text-start w-100">
+                                <h4>{{ blog.title }}</h4>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <div class="row">
+                                <!-- Description Section -->
+                                <div class="col-12 mb-2 text-start">
+                                    <div class="blog-description p-3">
+                                        <h4>{{ blog.content|truncatewords:30 }}</h4>
+                                    </div>
+                                </div>
+                                <!-- Buttons Section -->
+                                <div class="col-12 ">
+                                    <div class="blog-buttons p-3 justify-content-start">
+                                        <a href="#" class="btn btn-outline-dark btn-sm mt-2">Read More</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Carousel Controls -->
+            <a class="carousel-control-prev" href="#blog-carousel" role="button" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#blog-carousel" role="button" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </a>
+        </div>
+    </div>
+
+    <style>
+        /* Blog Title Styling */
+        .blog-title {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Blog Description Styling */
+        .blog-description {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* Button Section Styling */
+        .blog-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Button Styling */
+        .btn-outline-dark {
+            border: 1px solid #007bff;
+            color: #007bff;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-dark:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .carousel-item {
+            padding: 30px;
+        }
+
+        /* Adjusting the Button */
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: #007bff; /* Elegant blue color for arrows */
+            border-radius: 50%;
+            padding: 10px;
+        }
+
+        .carousel-control-prev-icon:hover,
+        .carousel-control-next-icon:hover {
+            background-color: #0056b3; /* Darker shade of blue */
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+{% endblock %}

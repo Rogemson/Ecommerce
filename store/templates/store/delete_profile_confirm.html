@@ -1,0 +1,17 @@
+{% extends 'store/main.html' %}
+
+{% block content %}
+<section class="profile" style="padding-top: 8rem;">
+    <div class="container">
+        <h1 class="text-center mb-5">Are you sure you want to delete your profile?</h1>
+        
+        <div class="text-center mt-5">
+            <form method="post">
+                {% csrf_token %}
+                <a href="{% url 'view_profile' %}" class="btn btn-lg btn-outline-secondary">No, take me back</a>
+                <button type="submit" class="btn btn-lg btn-danger">Yes, delete my profile</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock content %}

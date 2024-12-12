@@ -1,0 +1,47 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .success-message {
+        text-align: center;
+        padding: 50px;
+        background-color: #0f0f0f; /* Success Green */
+        color: white;
+        border-radius: 10px;
+    }
+
+    .success-message h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color:white;
+    }
+
+    .success-message p {
+        font-size: 1.2rem;
+    }
+
+    .btn-back {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #0f0f0f; /* PayPal Blue */
+        color: white;
+        text-align: center;
+        border-radius: 8px;
+        text-decoration: none;
+        margin-top: 30px;
+    }
+
+    .btn-back:hover {
+        background-color: #424242; /* Darker PayPal Blue */
+    }
+</style>
+
+<div class="container my-5">
+    <div class="success-message">
+        <h2>Payment Successful!</h2>
+        <p>Your payment was completed successfully. Thank you for your purchase!</p>
+    </div>
+    <a href="/#products" class="btn-back">Continue Shopping</a>
+</div>
+{% endblock content %}

@@ -1,0 +1,321 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<style>
+    ::placeholder {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    .breadcrumb {
+        background-color: transparent;
+    }
+
+    .breadcrumb-item a {
+        color: gray; 
+        font-size: 1rem; 
+    }
+
+    .breadcrumb-item a:hover {
+        color: #0f0f0f;
+    }
+
+    .breadcrumb-item.active {
+        color: #0f0f0f; 
+    }
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: ">"; 
+        color: #999; 
+        padding: 0 10px; 
+    }
+
+    .custom-paypal-btn {
+        width: 100%;
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #0070ba; 
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .custom-paypal-btn:hover {
+        background-color: #006097; 
+    }
+
+    .custom-paypal-btn img {
+        margin-left: 10px;
+    }
+
+    .custom-gcash-btn {
+        width: 100%;
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #0f0f0f;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .custom-gcash-btn:hover {
+        background-color: #3e3e3e;
+    }
+
+    .custom-gcash-btn img {
+        margin-left: 10px;
+        max-width: 20px;
+    }
+
+    .content-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+</style>
+<div class="row content-container" style="padding-top: 8rem;">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item {% if request.path == '/cart/' %}active{% else %}text-muted{% endif %}" style="text-decoration: none;">
+                <a href="{% url 'cart' %}" style="text-decoration: none;">Cart</a>
+            </li>
+            <li class="breadcrumb-item {% if request.path == '/shipping-info/' %}active{% else %}text-muted{% endif %}" style="font-weight: 600;">
+                Shipping Information & Payment
+            </li>
+        </ol>
+    </nav>
+
+    <div class="col-lg-6">
+        <div class="card shadow-sm border-0 rounded-lg p-4">
+            <div class="card-body">
+                <h4 class="card-title mb-4 text-left">User Information</h4>
+                <form id="form">
+                    <div id="user-info">
+                        <div class="mb-3">
+                            <input required class="form-control form-control-lg" type="text" name="name" placeholder="Full Name">
+                        </div>
+                        <div class="mb-3">
+                            <input required class="form-control form-control-lg" type="email" name="email" placeholder="Email Address">
+                        </div>
+                    </div>
+                    <div id="shipping-info" class="mt-4">
+                        <h5 class="mb-3 text-left">Shipping Information</h5>
+                        <div class="mb-3">
+                            <input class="form-control form-control-lg" type="text" name="address" placeholder="Street Address" required>
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control form-control-lg" type="text" name="city" placeholder="City" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 mb-3">
+                                <input class="form-control form-control-lg" type="text" name="state" placeholder="State/Province" required>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <input class="form-control form-control-lg" type="text" name="zipcode" placeholder="Zip/Postal Code" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control form-control-lg" type="text" name="country" placeholder="Country" required>
+                        </div>
+                    </div>             
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card shadow-sm border-0 rounded-lg p-4">
+            <div class="card-body">
+                <a class="btn btn-outline-dark mb-4" href="{% url 'cart' %}">
+                    &#x2190; Back to Cart
+                </a>
+                <h3 class="card-title mb-4 text-center">Order Summary</h3>
+                <hr>
+                {% for item in items %}
+                <div class="d-flex justify-content-between align-items-center border-bottom py-3">
+                    <div>
+                        <img src="{{ item.product.imageURL }}" alt="{{ item.product.name }}" class="img-fluid rounded" style="max-height: 80px;">
+                    </div>
+                    <div class="ms-3">
+                        <p class="mb-0 fw-semibold">{{ item.product.name }}</p>
+                    </div>
+                    <div>
+                        <p class="mb-0">${{ item.product.price|floatformat:2 }}</p>
+                    </div>
+                    <div>
+                        <p class="mb-0">x{{ item.quantity }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <h5 class="fw-bold">Items:</h5>
+                    <h5 class="fw-bold">{{ order.get_cart_items }}</h5>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <h5 class="fw-bold">Total:</h5>
+                    <h5 class="fw-bold">${{ order.get_cart_total|floatformat:2 }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="payment-container py-3 w-100 mx-auto d-flex flex-column align-items-center">
+            <button class="btn btn-dark custom-gcash-btn mb-3">
+                <span class="me-2">Pay with GCash</span>
+                <img src="https://img.icons8.com/?size=100&id=a8naL829HXnB&format=png&color=ffffff" alt="GCash Icon" style="max-width: 20px;">
+            </button>   
+            <div id="paypal-button-container" class="rounded w-100"></div>
+        </div>  
+    </div>
+</div>
+
+<script src="https://www.paypal.com/sdk/js?client-id=ARnLnFmMUlO541iaL8AvMEV0lNgLColBT6kOnTSbKT3jIIsUprUxzEip_5UnuMFt4aaIwxk6qc9bF0Kg&currency=USD&disable-funding=credit"></script>
+
+<script>
+    function validateForm() {
+    const form = document.getElementById('form');
+    const inputs = form.querySelectorAll('input[required]');
+    let isValid = true;
+
+    inputs.forEach(input => {
+        if (!input.value.trim()) {
+            isValid = false;
+            input.classList.add('is-invalid');
+            input.style.borderColor = 'red';
+        } else {
+            input.classList.remove('is-invalid');
+            input.style.borderColor = '';
+        }
+    });
+
+    return isValid;
+}
+
+    var total = '{{order.get_cart_total}}'
+    paypal.Buttons({
+    style: {
+        layout: 'horizontal',
+        size: 'responsive', 
+        shape: 'rect',      
+        color: 'black'     
+    },
+    createOrder: function(data, actions) {
+        if (!validateForm()) {
+            return actions.reject();
+        }
+        return actions.order.create({
+            purchase_units: [{
+                amount: {
+                    value: parseFloat(total).toFixed(2)
+                }
+            }]
+        });
+    },
+    onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+            submitFormData();
+            window.location.href = "{% url 'payment_success' %}";
+        });
+    }
+}).render('#paypal-button-container');
+</script>
+
+<script type="text/javascript">
+    var shipping = '{{order.shipping}}'
+
+    if (shipping == 'False'){
+        document.getElementById('shipping-info').innerHTML = ''
+    }
+
+    if (user != 'AnonymousUser'){
+        document.getElementById('user-info').innerHTML = ''
+        }
+
+    if (shipping == 'False' && user != 'AnonymousUser'){
+            document.getElementById('form-wrapper').classList.add("hidden");
+            document.getElementById('payment-info').classList.remove("hidden");
+    }
+
+    var form = document.getElementById('form')
+    form.addEventListener('submit', function(e){
+        e.preventDefault()
+        console.log('Form Submitted...')
+        document.getElementById('form-button').classList.add("hidden");
+        document.getElementById('payment-info').classList.remove("hidden");
+    })
+
+    /*
+    document.getElementById('make-payment').addEventListener('click', function(e){
+        submitFormData()
+    })
+    */
+
+    function submitFormData(){
+    console.log('Payment button clicked')
+
+    var userFormData = {
+        'name':null,
+        'email':null,
+        'total':total,
+    }
+
+    var shippingInfo = {
+        'address':null,
+        'city':null,
+        'state':null,
+        'zipcode':null,
+    }
+
+    if (shipping != 'False'){
+        shippingInfo.address = form.address.value
+        shippingInfo.city = form.city.value
+        shippingInfo.state = form.state.value
+        shippingInfo.zipcode = form.zipcode.value
+    }
+
+    if (user == 'AnonymousUser'){
+        userFormData.name = form.name.value
+        userFormData.email = form.email.value
+    }
+
+    console.log('Shipping Info:', shippingInfo)
+    console.log('User Info:', userFormData)
+
+    var url = "/process_order/"
+    fetch(url, {
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json',
+            'X-CSRFToken':csrftoken,
+        },
+        body:JSON.stringify({'form':userFormData, 'shipping':shippingInfo}),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        if (data.error) {
+            alert(data.error); 
+        } else {
+            console.log('Success:', data);
+            alert('Transaction completed');
+            
+            cart = {}
+            document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
+            
+            window.location.href = "/#products"
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Payment success.');
+    })
+}
+
+</script>
+{% endblock content %}
+

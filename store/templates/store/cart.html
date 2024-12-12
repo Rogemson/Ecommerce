@@ -1,0 +1,165 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .breadcrumb {
+        background-color: transparent;
+    }
+
+    .breadcrumb-item a {
+        color: gray;
+    }
+
+    .breadcrumb-item a:hover {
+        color: #0f0f0f;
+    }
+
+    .breadcrumb-item.active {
+        color: #0f0f0f;
+    }
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: ">";
+        color: #999;
+    }
+
+    .cart-row {
+        display: flex;
+        align-items: center;
+    }
+
+    .cart-row img.row-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .quantity {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 6rem;
+        border-radius: 0.6rem;
+        margin: 0 auto;
+    }
+
+    .quantity img {
+        margin: 0 5px;
+        width: 25px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 15px;
+    }
+
+    .btn-success {
+        font-size: 1.1rem;
+        padding: 12px 25px;
+        border-radius: 50px;
+    }
+
+    .btn-success:hover {
+        background-color: #28a745;
+    }
+
+    .cart-row .col-2, .cart-row .col-3 {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .cart-row p {
+        margin: 0;
+    }
+</style>
+
+<div class="container" style="padding-top: 8rem;">
+    <a class="btn btn-outline-dark mb-4 fw-semibold" href="/#products" style="text-transform: none; font-size: smaller;">
+        &#x2190; Continue Shopping
+    </a>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page" style="font-weight: 600;">Cart</li>
+            <li class="breadcrumb-item">
+                {% if cartItems > 0 %}
+                    <a href="{% url 'checkout' %}" style="text-decoration: none;">Shipping Information & Payment</a>
+                {% else %}
+                    <span class="text-muted">Shipping Information & Payment</span>
+                {% endif %}
+            </li>
+        </ol>
+    </nav>
+
+    {% if error_message %}
+        <div class="alert alert-danger">
+            {{ error_message }}
+        </div>
+    {% endif %}
+
+    <div class="mb-4 p-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1>Cart</h1>
+            </div>
+            <a class="btn btn-success btn-lg d-inline-flex align-items-center justify-content-center"
+                href="{% url 'checkout' %}" 
+                style="background-color: black; color: white; padding: 10px 20px; border-radius: 1rem; text-transform: none;"
+                {% if not cartItems %}disabled{% endif %}>
+                    <img src="https://img.icons8.com/?size=100&id=aEiiHu1CJY90&format=png&color=ffffff" 
+                        alt="Checkout Icon" style="width: 24px; height: 24px; margin-right: 10px;">
+                    Checkout
+                </a>
+        </div>
+    </div>
+
+    <div class="">
+        <div class="cart-row mb-3 py-2 border-bottom">
+            <div class="col-2 text-center"><strong>Product</strong></div>
+            <div class="col-3 text-center"><strong>Name</strong></div>
+            <div class="col-2 text-center"><strong>Quantity</strong></div>
+            <div class="col-2 text-center"><strong>Price</strong></div>
+            <div class="col-2 text-center"><strong>Total</strong></div>
+        </div>
+
+        {% for item in items %}
+        <div class="cart-row mb-3 py-4 ">
+            <div class="col-2 text-center">
+                <img class="row-image" src="{{ item.product.imageURL }}" alt="Product Image" style="max-height: 80px; object-fit: cover;">
+            </div>
+            <div class="col-3 text-center">
+                <p>{{ item.product.name }}</p>
+            </div>
+            <div class="col-2 text-center">
+                <div class="quantity border p-2">
+                    <img 
+                        data-product="{{ item.product.id }}" 
+                        data-action="remove" 
+                        class="chg-quantity update-cart" 
+                        src="https://img.icons8.com/?size=100&id=95766&format=png&color=000000" 
+                        alt="Increase quantity" 
+                        style="cursor: pointer; width: 1rem; height: 1rem;">
+                    <p class="quantity ms-2">{{ item.quantity }}</p>
+                    <img 
+                        data-product="{{ item.product.id }}" 
+                        data-action="add" 
+                        class="chg-quantity update-cart" 
+                        src="https://img.icons8.com/?size=100&id=62888&format=png&color=000000" 
+                        alt="Decrease quantity" 
+                        style="cursor: pointer; width: 1rem; height: 1rem;">
+                </div>                
+            </div>
+            <div class="col-2 text-center">
+                <p>${{ item.product.price|floatformat:2 }}</p>
+            </div>
+            <div class="col-2 text-center">
+                <p>${{ item.get_total|floatformat:2 }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

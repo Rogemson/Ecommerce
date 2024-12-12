@@ -1,0 +1,145 @@
+{% extends 'store/main.html' %}
+
+{% block content %}
+<section class="profile py-5 justify-content-center">
+    <div class="container">
+        
+        <!-- Profile Card Section -->
+        <div class="row justify-content-center" style="margin-top: 4rem;">
+            <div class="col-lg-8">
+                <div class="card border rounded p-5">
+                    <div class="card-body">
+                        <div class="user_settings d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="navbar-text text-black me-3 text-center">Hello, {{ user.username }}</h4>
+                            <div>
+                                
+                                <a href="{% url 'update_profile' %}" class=""><img src="https://img.icons8.com/?size=30&id=100103&format=png&color=000000" alt="User Icon" class="img-fluid" style="max-width: 50px;"></a>
+                                <a href="{% url 'delete_profile' %}" class="" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.')"><img src="https://img.icons8.com/?size=30&id=67884&format=png&color=000000" alt="User Icon" class="img-fluid" style="max-width: 50px;"></a>
+                                
+                            </div>
+                            
+                        </div>
+                        
+                        
+                        <div class="text-center mb-4">
+                            <img src="https://blush.design/api/download?shareUri=H2WBpDrkR8p02YlR&w=800&h=800&fm=png" alt="Profile Image" class="img-fluid" style="max-width: 100px;">
+                        </div>
+
+                        <div class="card-body mt-4">
+                           
+                            <nav>
+                                <div class="nav justify-content-center">
+                                    <!-- Orders Nav Item -->
+                                    <a class="nav-link text-center" href="{% url 'order_list' %}">
+                                        <img src="https://img.icons8.com/?size=30&id=B37Ki8mzmJkK&format=png&color=000000" alt="Orders" class="img-fluid mb-2">
+                                        <h6>Orders</h6>
+                                    </a>
+                                    
+                                    <!-- Cart Nav Item -->
+                                    <a class="nav-link text-center" href="{% url 'cart' %}">
+                                        <img src="https://img.icons8.com/?size=30&id=59994&format=png&color=000000" alt="Cart" class="img-fluid mb-2">
+                                        <h6>Cart</h6>
+                                    </a>
+    
+                                    <!-- Coupon Nav Item -->
+                                    <a class="nav-link text-center" href="#">
+                                        <img src="https://img.icons8.com/?size=30&id=HjB5A5zHrt6o&format=png&color=000000" alt="Coupon" class="img-fluid mb-2">
+                                        <h6>Coupon</h6>
+                                    </a>
+                                </div>
+                            </nav>
+                        </div>
+                        <!-- User Details List -->
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <strong>Username:</strong>
+                                <span class="text-muted">{{ user.username }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <strong>Email:</strong>
+                                <span class="text-muted">{{ user.email }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <strong>Date Joined:</strong>
+                                <span class="text-muted">{{ user.date_joined|date:"d M Y" }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <strong>Last Login:</strong>
+                                <span class="text-muted">{{ user.last_login|date:"d M Y H:i" }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="text-center mt-5 justify-content-end d-flex">
+                        <a href="{% url 'logout' %}" class="btn btn-lg btn-danger mr-3 rounded">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+<style>
+  
+    .d-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .profile {
+        background-color: #f8f9fa;
+        border-radius: 15px;
+    }
+
+    .card {
+        border-radius: 15px;
+    }
+
+    .card-body {
+        padding: 30px;
+    }
+
+    .profile img {
+        border: 3px solid #ddd;
+    }
+
+    .profile h3 {
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    .text-center a {
+        margin-right: 15px;
+    }
+
+    .card-body img {
+        max-width: 100px;
+        margin-bottom: 20px;
+    }
+
+    .card-body img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .card-body h6 {
+        color: #333;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+        .card-body {
+            padding: 20px;
+        }
+
+        .profile img {
+            width: 120px;
+            height: 120px;
+        }
+    }
+</style>
+

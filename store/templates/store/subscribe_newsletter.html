@@ -1,0 +1,83 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid my-5 px-5 w-100 border">
+
+    <div class="row align-items-center">
+        <!-- Left Div -->
+        <div class="col-md-6 px-5">
+            <div class="p-4">
+                <h3 class="text-muted mb-4 fw-semibold">
+                    We’d love to hear from you! If you have any questions, feedback, or just want to share your thoughts, feel free to reach out. Your input helps us serve you better!
+                </h3>
+
+                <a class="navbar-brand fs-4 text-primary fw-bold" href="{% url 'products' %}">Graham & Co.</a>
+
+                <!-- Subscription Form -->
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group my-3">
+                        <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-2">Subscribe</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Div -->
+        <div class="col-md-6 text-center">
+            <img src="{% static 'images/placeholder.png' %}" alt="Newsletter Image" class="img-fluid rounded shadow" style="max-width: 100%; height: auto;">
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Full-width container styling */
+    .container-fluid {
+        width: 100vw;
+        max-width: 100%;
+    }
+
+    /* Left Div Styling */
+    h3 {
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+
+    p {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    /* Form Input Styling */
+    .form-control {
+        border-radius: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        font-size: 1rem;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    /* Button Styling */
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        transform: translateY(-3px);
+    }
+
+    /* Image Styling */
+    .img-fluid {
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}
